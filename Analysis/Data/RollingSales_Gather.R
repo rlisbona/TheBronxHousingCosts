@@ -1,9 +1,16 @@
-# Author: Benjamin Reddy
-# Taken from pages 49-50 of O'Neil and Schutt
+###########################################################
+#
+# Students: Chris Boomhower, Randy Lisbona, Jose Quinonez
+# Live Session Assignment 3/4
+# 06/02/2016
+#
+# RollingSales_Gather.R: ????????????????
+#
+# Project R code modified from Benjamin Reddy's code, taken
+# from pages 49-50 of O'Neil and Schutt
+#
+###########################################################
 
-require(gdata)
-require(plyr) #Added by Monnie McGee
-setwd("~/GitHub/MSDS_6306/TheBronxHousingCosts") #Modified for Chris' pc
 
 ## You need a perl interpreter to do this on Windows.
 ## It's automatic in Mac
@@ -40,7 +47,7 @@ bk$year.built <- as.numeric(as.character(bk$year.built))
 attach(bk)
 hist(sale.price.n) # Something weird here
 hist(sale.price.n[sale.price.n>0])
-hist(gross.sqft[sale.price.n==0])
+#### NEED TO FIGURE OUT WHY ERRORING #### hist(gross.sqft[sale.price.n==0])
 detach(bk)
 
 ## keep only the actual sales
@@ -48,15 +55,3 @@ detach(bk)
 bk.sale <- bk[bk$sale.price.n!=0,]
 plot(bk.sale$gross.sqft,bk.sale$sale.price.n)
 plot(log(bk.sale$gross.sqft),log(bk.sale$sale.price.n))
-
-## for now, let's look at 1-, 2-, and 3-family homes
-bk.homes <- bk.sale[which(grepl("FAMILY",bk.sale$building.class.category)),]
-dim(bk.homes)
-plot(log(bk.homes$gross.sqft),log(bk.homes$sale.price.n))
-summary(bk.homes[which(bk.homes$sale.price.n<100000),])
-
-
-## remove outliers that seem like they weren't actual sales
-bk.homes$outliers <- (log(bk.homes$sale.price.n) <=5) + 0
-bk.homes <- bk.homes[which(bk.homes$outliers==0),]
-plot(log(bk.homes$gross.sqft),log(bk.homes$sale.price.n))
